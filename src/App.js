@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Dashboard from "./components/Dashboard";
+import DashboardAg from "./components/DashboardAg";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,7 +34,7 @@ function App() {
       </header>
       <main>
         <Dashboard />
-     
+        <DashboardAg />
       </main>
     </div>
   );
