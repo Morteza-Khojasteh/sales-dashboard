@@ -1,0 +1,18 @@
+{
+  "monthlySales": {
+    "2023": [
+      12000, 15000, 17000, 14000, 18000, 22000, 19000, 21000, 23000, 20000,
+      25000, 24000
+    ]
+  },
+  "categorySales": [
+    { "category": "Electronics", "sales": 50000 },
+    { "category": "Clothing", "sales": 30000 },
+    { "category": "Home & Kitchen", "sales": 40000 }
+  ],
+  "regionSales": [
+    { "region": "North America", "sales": 60000 },
+    { "region": "Europe", "sales": 45000 },
+    { "region": "Asia", "sales": 70000 }
+  ]
+}
