@@ -1,44 +1,74 @@
-import React from "react";
-import { AgCharts } from "ag-charts-react";
+import React, { useEffect, useRef } from "react";
+import { AgCharts } from "ag-charts-community"; // Import AgCharts from ag-charts-community
+import { getData } from "../data/data";
 
 const DashboardAg = () => {
-  const options = {
-    data: [
-      { month: "Jan", sales: 3000 },
-      { month: "Feb", sales: 2000 },
-      { month: "Mar", sales: 5000 },
-      { month: "Apr", sales: 4000 },
-      { month: "May", sales: 7000 },
-      { month: "Jun", sales: 6000 },
-    ],
-    series: [
-      {
-        xKey: "month",
-        yKey: "sales",
-        yName: "Sales ($)",
-        stroke: "#4285F4",
-        marker: { size: 5, fill: "#4285F4" },
-      },
-    ],
-    axes: [
-      {
-        type: "category",
-        position: "bottom",
-        title: { text: "Month" },
-      },
-      {
-        type: "number",
-        position: "left",
-        title: { text: "Sales ($)" },
-      },
-    ],
-    legend: { position: "bottom" },
+  const chartRef = useRef(null); // Ref for chart container
+  const dateFormatter = new Intl.DateTimeFormat("en-US");
+  const tooltip = {
+    renderer: ({ title, datum, xKey, yKey }) => ({
+      title,
+      content: `${dateFormatter.format(datum[xKey])}: ${datum[yKey]}`,
+    }),
   };
 
+  useEffect(() => {
+    const options = {
+      data: getData(),
+      title: {
+        text: "Road Fuel Prices",
+      },
+      footnote: {
+        text: "Source: Department for Business, Energy & Industrial Strategy",
+      },
+      series: [
+        {
+          type: "line",
+          xKey: "date",
+          yKey: "petrol",
+          tooltip,
+        },
+        {
+          type: "line",
+          xKey: "date",
+          yKey: "diesel",
+          tooltip,
+        },
+      ],
+      axes: [
+        {
+          position: "bottom",
+          type: "time",
+          title: {
+            text: "Date",
+          },
+          label: {
+            format: "%b",
+          },
+        },
+        {
+          position: "left",
+          type: "number",
+          title: {
+            text: "Price in Pence",
+          },
+        },
+      ],
+    };
+
+    const chart = AgCharts.create({
+      ...options,
+      container: chartRef.current, // Use the ref to set the container for the chart
+    });
+
+    // Cleanup function to destroy the chart when the component unmounts
+    return () => {
+      chart.destroy();
+    };
+  }, [tooltip]); // Empty dependency array ensures this runs only once when component mounts
+
   return (
-    <div style={{ width: "100%", height: "400px" }}>
-      <AgCharts options={options} />
-    </div>
+    <div style={{ width: "100%", height: "400px" }} ref={chartRef}></div> // Use ref here
   );
 };
 
